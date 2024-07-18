@@ -1,6 +1,9 @@
 import { BodyMindSoulStats, BaseStats, EquipmentStats, Equipment, ActualStats } from '../types/interfaces';
+import { getAllEquipmentBonusStats, getActualStats } from '../utils/equipment.utils';
 
 export class Character {
+    name: string;
+    level: number;
     bodyMindSoulStats: BodyMindSoulStats;
     baseStats: BaseStats;
     equipmentStats: EquipmentStats;
@@ -8,12 +11,16 @@ export class Character {
     equipment: Equipment;
 
     constructor(
+        name: string,
+        level: number,
         bodyMindSoulStats: BodyMindSoulStats,
         baseStats: BaseStats,
         equipmentStats: EquipmentStats,
         actualStats: ActualStats,
         equipment: Equipment,
     ) {
+        this.name = name;
+        this.level = level;
         this.bodyMindSoulStats = bodyMindSoulStats;
         this.baseStats = baseStats;
         this.equipmentStats = equipmentStats;
@@ -21,8 +28,30 @@ export class Character {
         this.equipment = equipment;
     }
 
+    updateBodyMindSoulStats(newStats: Partial<BodyMindSoulStats>) {
+        this.bodyMindSoulStats = { ...this.bodyMindSoulStats, ...newStats };
+        this.updateActualStats();
+    }
+
+    updateBaseStats(newStats: Partial<BaseStats>) {
+        this.baseStats = { ...this.baseStats, ...newStats };
+        this.updateActualStats();
+    }
+
+    updateEquipment(newEquipment: Partial<Equipment>) {
+        this.equipment = { ...this.equipment, ...newEquipment };
+        this.equipmentStats = getAllEquipmentBonusStats(this.equipment);
+        this.actualStats = getActualStats(this.baseStats, this.equipmentStats);
+        this.updateActualStats();
+    }
+
+    updateActualStats() {
+        this.actualStats = getActualStats(this.baseStats, this.equipmentStats);
+    }
+
     test() {
         console.log(`
+            name: ${this.name}
             bodyMindSoulStats: ${this.bodyMindSoulStats}
             body: ${this.bodyMindSoulStats.body},
             mind: ${this.bodyMindSoulStats.mind},

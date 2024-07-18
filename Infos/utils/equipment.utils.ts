@@ -1,4 +1,5 @@
-import { Equipment, EquipmentItem, EquipmentStats, BaseStats, ActualStats } from '../types/interfaces';
+import { Equipment, EquipmentStats, BaseStats, ActualStats } from '../types/interfaces';
+import { EquipmentItem } from '../types/types';
 
 export function getEquipmentBonusStats<T extends keyof EquipmentItem>(equipment: Equipment, key: T): number {
     let bonus = 0;
@@ -34,29 +35,11 @@ export function createBaseEquipment(): Equipment {
     return equipment
 }
 
-export function getActualStats(baseStats: BaseStats, equipmentStats: EquipmentStats) {
-    let actualStats: ActualStats = {
+export function getActualStats(baseStats: BaseStats, equipmentStats: EquipmentStats): ActualStats {
+    return {
         actualArmor: baseStats.baseArmor + equipmentStats.bonusArmor,
         actualAttackDmg: baseStats.baseAttackDmg + equipmentStats.bonusAttackDmg,
         actualAttackSpd: baseStats.baseAttackSpd + equipmentStats.bonusAttackSpd,
         actualHp: baseStats.baseHp + equipmentStats.bonusHp,
-    }
-
-    return actualStats
-}
-
-let testHelmet: EquipmentItem = { Name: "Metal Helmet", bonusArmor: 10 }
-let testChest: EquipmentItem = { Name: "Metal Chest", bonusHp: 10 }
-let testPants: EquipmentItem = { Name: "Metal Pants", bonusAttackSpd: 4 }
-let testShoes: EquipmentItem = { Name: "Metal Shoes", bonusAttackDmg: 3 }
-let testWeapon: EquipmentItem = { Name: "Metal Sword", bonusAttackDmg: 4 }
-let testShield: EquipmentItem = { Name: "Metal Shield", bonusArmor: -2 }
-
-export const testEquipment: Equipment = {
-    helmet: testHelmet,
-    chest: testChest,
-    pants: testPants,
-    shoes: testShoes,
-    weapon: testWeapon,
-    shield: testShield
+    };
 }
